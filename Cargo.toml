@@ -2,6 +2,9 @@
 name = "pnpm-extra"
 version = "0.1.0"
 edition = "2021"
+description = "A mall CLI tool that adds some pnpm commands I want"
+license-file = "LICENSE"
+repository = "https://github.com/simonbuchan/pnpm-extra"
 
 [dependencies]
 clap = { version = "4.5.15", features = ["derive"] }
