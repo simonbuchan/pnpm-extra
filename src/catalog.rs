@@ -69,7 +69,10 @@ pub(crate) fn run(args: Args) -> Result<()> {
             )
             .context("writing pnpm-workspace.yaml")?;
             // So run prettier on it:
-            std::process::Command::new("prettier")
+            std::process::Command::new("pnpm")
+                .arg("exec")
+                .arg("--")
+                .arg("prettier")
                 .arg("--write")
                 .arg("pnpm-workspace.yaml")
                 .status()
