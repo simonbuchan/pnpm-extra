@@ -1,4 +1,4 @@
-use anyhow::{bail, Context as _, Result};
+use anyhow::{Context as _, Result};
 
 #[derive(clap::Subcommand)]
 pub(crate) enum Args {
@@ -14,21 +14,10 @@ pub(crate) enum Args {
     },
 }
 
-fn read_workspace() -> Result<serde_yaml::Mapping> {
-    let data = std::fs::read("pnpm-workspace.yaml").context("reading pnpm-workspace.yaml");
-    let workspace = serde_yaml::from_slice::<serde_yaml::Value>(&data?)
-        .context("parsing pnpm-workspace.yaml")?;
-    let workspace = match workspace {
-        serde_yaml::Value::Mapping(map) => map,
-        _ => bail!("pnpm-workspace.yaml content is not a mapping?"),
-    };
-    Ok(workspace)
-}
-
 pub(crate) fn run(args: Args) -> Result<()> {
     match args {
         Args::Add { name, catalog } => {
-            let mut workspace = read_workspace()?;
+            let mut workspace = pnpm_extra::read_workspace()?;
             let catalog = match catalog {
                 None => workspace.entry("catalog".into()),
                 Some(catalog) => workspace

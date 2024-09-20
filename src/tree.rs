@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(tag = "lockfileVersion")]
-enum Lockfile {
+pub enum Lockfile {
     #[serde(rename = "9.0")]
     V9 {
         importers: HashMap<String, Importer>,
@@ -14,26 +14,26 @@ enum Lockfile {
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct Importer {
+pub struct Importer {
     #[serde(default)]
-    dependencies: HashMap<String, Dependency>,
+    pub dependencies: HashMap<String, Dependency>,
     #[serde(default)]
-    dev_dependencies: HashMap<String, Dependency>,
+    pub dev_dependencies: HashMap<String, Dependency>,
 }
 
 #[derive(Debug, serde::Deserialize)]
-struct Dependency {
+pub struct Dependency {
     // specifier: String,
-    version: String,
+    pub version: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
-struct Snapshot {
+pub struct Snapshot {
     #[serde(default)]
-    dependencies: HashMap<String, String>,
+    pub dependencies: HashMap<String, String>,
 }
 
-pub(crate) fn run(name: &str) -> Result<()> {
+pub fn print_tree(name: &str) -> Result<()> {
     let root = std::env::current_dir().context("getting current directory")?;
 
     let Lockfile::V9 {
@@ -108,7 +108,7 @@ pub(crate) fn run(name: &str) -> Result<()> {
     // Print the tree, skipping repeated nodes.
     let mut seen = HashSet::<NodeId>::new();
 
-    fn print_tree(
+    fn print_tree_inner(
         inverse_deps: &HashMap<NodeId, HashSet<NodeId>>,
         seen: &mut HashSet<NodeId>,
         node_id: &NodeId,
@@ -124,13 +124,13 @@ pub(crate) fn run(name: &str) -> Result<()> {
         };
         println!("{:indent$}{node_id}:", "", indent = depth * 2,);
         for dep_id in dep_ids {
-            print_tree(inverse_deps, seen, dep_id, depth + 1);
+            print_tree_inner(inverse_deps, seen, dep_id, depth + 1);
         }
     }
 
     for node_id in inverse_deps.keys() {
         if matches!(node_id, NodeId::Package { name: package_name, .. } if name == package_name) {
-            print_tree(&inverse_deps, &mut seen, node_id, 0);
+            print_tree_inner(&inverse_deps, &mut seen, node_id, 0);
         }
     }
 

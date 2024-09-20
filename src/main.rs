@@ -14,12 +14,11 @@ enum Args {
 }
 
 mod catalog;
-mod tree;
 
 fn main() -> Result<()> {
     match Args::parse() {
         Args::Tree { name } => {
-            tree::run(&name)?;
+            pnpm_extra::tree::print_tree(&name)?;
             Ok(())
         }
         Args::Catalog(args) => {
