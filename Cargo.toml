@@ -1,6 +1,6 @@
 [package]
 name = "pnpm-extra"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "A mall CLI tool that adds some pnpm commands I want"
 license-file = "LICENSE"
