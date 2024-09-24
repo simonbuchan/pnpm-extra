@@ -11,9 +11,8 @@
 
 use anyhow::{bail, Context as _, Result};
 
-mod tree;
-
-pub use tree::print_tree;
+/// `pnpm-extra tree` implementation details.
+pub mod tree;
 
 /// Parse and return the content of pnpm-workspace.yaml as a serde_yaml::Mapping.
 ///
