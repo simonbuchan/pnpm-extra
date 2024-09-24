@@ -1,3 +1,5 @@
+#![doc = include_str!("../README.md")]
+
 use anyhow::Result;
 use clap::Parser;
 
@@ -18,7 +20,7 @@ mod catalog;
 fn main() -> Result<()> {
     match Args::parse() {
         Args::Tree { name } => {
-            pnpm_extra::tree::print_tree(&name)?;
+            pnpm_extra::print_tree(&name)?;
             Ok(())
         }
         Args::Catalog(args) => {
