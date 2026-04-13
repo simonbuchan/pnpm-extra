@@ -2,7 +2,7 @@
 //!
 //! The library for the `pnpm-extra` binary.
 //!
-//! At the moment this simply exports the `print_tree` function that implments the `pnpm-extra tree`
+//! At the moment this simply exports the `print_tree` function that implements the `pnpm-extra tree`
 //! command, and the `read_workspace` function that reads the `pnpm-workspace.yaml` file used by
 //! `pnpm-extra catalog add` command.
 //!
@@ -11,13 +11,14 @@
 
 use anyhow::{bail, Context as _, Result};
 
-/// `pnpm-extra tree` implementation details.
+/// `pnpm-extra tree` implementation details and `pnpm-lock.yaml` reader.
 pub mod tree;
 
-/// Parse and return the content of pnpm-workspace.yaml as a serde_yaml::Mapping.
+/// Parse and return the content of `pnpm-workspace.yaml` as a `serde_yaml::Mapping`.
 ///
-/// This is unlikely to be useful as this is a human edited file and serde_yaml does not preserve
-/// comments or formatting, but is provided for completeness.
+/// As this is a human edited file and `serde_yaml` does not preserve comments or formatting,
+/// the returned `serde_yaml::Mapping` will be a lossy representation of the original file
+/// and should not be written back to disk.
 ///
 /// # Errors
 /// - If the pnpm-workspace.yaml file cannot be read or parsed.
